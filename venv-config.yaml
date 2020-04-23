@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: install odoo python requirements into venv
+      pip:
+	requirements: requirements.txt
+	virtualenv: venv
+        virtualenv_python: python3

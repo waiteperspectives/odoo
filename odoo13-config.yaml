@@ -9,3 +9,4 @@
 - import_playbook: postgres-config.yaml
 - import_playbook: npm-config.yaml
 - import_playbook: _odoo13-config.yaml
+- import_playbook: venv-config.yaml
