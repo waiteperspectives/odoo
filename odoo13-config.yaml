@@ -1,0 +1,11 @@
+###############################################################################
+# Provisioning script for odoo dev environment on an ubuntu18 machine
+#
+# prepares system for Odoo without actually downloading the source, which would
+# be done via submodules or docker
+###############################################################################
+
+---
+- import_playbook: postgres-config.yaml
+- import_playbook: npm-config.yaml
+- import_playbook: _odoo13-config.yaml
