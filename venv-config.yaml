@@ -9,4 +9,4 @@
       pip:
         requirements: requirements.txt
         virtualenv: venv
-	virtualenv_python: python3
+        virtualenv_python: python3
