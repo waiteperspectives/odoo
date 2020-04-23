@@ -7,6 +7,6 @@
   tasks:
     - name: install odoo python requirements into venv
       pip:
-	requirements: requirements.txt
-	virtualenv: venv
-        virtualenv_python: python3
+        requirements: requirements.txt
+        virtualenv: venv
+	virtualenv_python: python3
