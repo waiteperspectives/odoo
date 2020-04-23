@@ -1,0 +1,51 @@
+##############################################################################
+# Set up postgres for odoo
+##############################################################################
+
+---
+- hosts: all
+  become: yes
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    pg_auth:
+      user: odoo
+      password: odoo
+
+  tasks:
+  - name: Update Server
+    apt:
+      update_cache: yes
+  - name: Create system group odoo
+    group:
+      name: "odoo"
+      state: present
+
+  - name: Create system user odoo
+    user:
+      name: "odoo"
+      group: "odoo"
+      shell: /bin/bash
+      state: present
+  - name: Install postgresql-contrib
+    apt: 
+      update_cache: yes
+      state: present
+      name: postgresql
+  - name: Install psycopg2
+    apt: 
+      update_cache: yes
+      state: present
+      name: python3-psycopg2
+  - name: Install postgresql
+    apt: 
+      update_cache: yes
+      state: present
+      name: postgresql
+  - name: Add postgres user
+    become: yes
+    become_user: postgres
+    postgresql_user:
+      name: "{{ pg_auth['user'] }}"
+      password: "{{ pg_auth['password'] }}"
+      role_attr_flags: "CREATEDB,SUPERUSER"
