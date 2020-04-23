@@ -16,6 +16,17 @@
   - name: Update Server
     apt:
       update_cache: yes
+  - name: Create system group odoo
+    group:
+      name: "odoo"
+      state: present
+
+  - name: Create system user odoo
+    user:
+      name: "odoo"
+      group: "odoo"
+      shell: /bin/bash
+      state: present
   - name: Install postgresql-contrib
     apt:
       update_cache: yes
