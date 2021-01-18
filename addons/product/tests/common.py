@@ -12,7 +12,7 @@ class TestProductCommon(common.SavepointCase):
         # Customer related data
         cls.partner_1 = cls.env['res.partner'].create({
             'name': 'Julia Agrolait',
-            'email': 'julia@agrolait.example.com',
+            'email': 'julia@example.com',
         })
 
         # Product environment related data

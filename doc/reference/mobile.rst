@@ -160,7 +160,7 @@ Create a new device contact with the given contact details.
 		'mobile': '9999999999',
 		'phone': '7954856587',
 		'fax': '765898745',
-		'email': 'michel.fletcher@agrolait.example.com',
+		'email': 'michel.fletcher@example.com',
 		'website': 'http://www.agrolait.com',
 		'street': '69 rue de Namur',
 		'street2': false,

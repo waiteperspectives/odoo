@@ -19,13 +19,13 @@ class TestAccessRights(TestCommonSalePurchaseNoChart):
         cls.user_salesperson = cls.env['res.users'].with_context(no_reset_password=True).create({
             'name': 'Le Grand Jojo User',
             'login': 'grand.jojo',
-            'email': 'grand.jojo@chansonbelge.com',
+            'email': 'grand.jojo@example.com',
             'groups_id': [(6, 0, [group_sale_user.id])]
         })
         cls.user_purchaseperson = cls.env['res.users'].with_context(no_reset_password=True).create({
             'name': 'Jean-Luc Fonck',
             'login': 'jl.fonck',
-            'email': 'jl.fonck@chansonbelge.com',
+            'email': 'jl.fonck@example.com',
             'groups_id': [(6, 0, [group_purchase_user.id])]
         })
 
