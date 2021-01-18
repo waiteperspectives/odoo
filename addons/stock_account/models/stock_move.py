@@ -5,7 +5,7 @@ from collections import defaultdict
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-from odoo.tools import float_compare, float_round, float_is_zero
+from odoo.tools import float_compare, float_round, float_is_zero, OrderedSet
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ class StockMove(models.Model):
         self.ensure_one()
         price_unit = self.price_unit
         # If the move is a return, use the original move's price unit.
-        if self.origin_returned_move_id and self.origin_returned_move_id.stock_valuation_layer_ids:
+        if self.origin_returned_move_id and self.origin_returned_move_id.sudo().stock_valuation_layer_ids:
             price_unit = self.origin_returned_move_id.stock_valuation_layer_ids[-1].unit_cost
         return not self.company_id.currency_id.is_zero(price_unit) and price_unit or self.product_id.standard_price
 
@@ -57,13 +57,13 @@ class StockMove(models.Model):
         :rtype: recordset
         """
         self.ensure_one()
-        res = self.env['stock.move.line']
+        res = OrderedSet()
         for move_line in self.move_line_ids:
             if move_line.owner_id and move_line.owner_id != move_line.company_id.partner_id:
                 continue
             if not move_line.location_id._should_be_valued() and move_line.location_dest_id._should_be_valued():
-                res |= move_line
-        return res
+                res.add(move_line.id)
+        return self.env['stock.move.line'].browse(res)
 
     def _is_in(self):
         """Check if the move should be considered as entering the company so that the cost method
@@ -237,6 +237,8 @@ class StockMove(models.Model):
         # Init a dict that will group the moves by valuation type, according to `move._is_valued_type`.
         valued_moves = {valued_type: self.env['stock.move'] for valued_type in self._get_valued_types()}
         for move in self:
+            if float_is_zero(move.quantity_done, precision_rounding=move.product_uom.rounding):
+                continue
             for valued_type in self._get_valued_types():
                 if getattr(move, '_is_%s' % valued_type)():
                     valued_moves[valued_type] |= move

@@ -18,11 +18,16 @@ class PurchaseOrder(models.Model):
     _description = "Purchase Order"
     _order = 'date_order desc, id desc'
 
+    def _default_currency_id(self):
+        company_id = self.env.context.get('force_company') or self.env.context.get('company_id') or self.env.company.id
+        return self.env['res.company'].browse(company_id).currency_id
+
     @api.depends('order_line.price_total')
     def _amount_all(self):
         for order in self:
             amount_untaxed = amount_tax = 0.0
             for line in order.order_line:
+                line._compute_amount()
                 amount_untaxed += line.price_subtotal
                 amount_tax += line.price_tax
             order.update({
@@ -49,15 +54,17 @@ class PurchaseOrder(models.Model):
                 for line in order.order_line.filtered(lambda l: not l.display_type)
             ):
                 order.invoice_status = 'to invoice'
-            elif all(
-                (line.product_qty if line.product_id.purchase_method == 'purchase' else line.qty_received)
-                and float_compare(
-                    line.qty_invoiced,
-                    line.product_qty if line.product_id.purchase_method == 'purchase' else line.qty_received,
-                    precision_digits=precision,
+            elif (
+                all(
+                    float_compare(
+                        line.qty_invoiced,
+                        line.product_qty if line.product_id.purchase_method == "purchase" else line.qty_received,
+                        precision_digits=precision,
+                    )
+                    >= 0
+                    for line in order.order_line.filtered(lambda l: not l.display_type)
                 )
-                >= 0
-                for line in order.order_line.filtered(lambda l: not l.display_type)
+                and order.invoice_ids
             ):
                 order.invoice_status = 'invoiced'
             else:
@@ -93,7 +100,7 @@ class PurchaseOrder(models.Model):
         help="Put an address if you want to deliver directly from the vendor to the customer. "
              "Otherwise, keep empty to deliver to your own company.")
     currency_id = fields.Many2one('res.currency', 'Currency', required=True, states=READONLY_STATES,
-        default=lambda self: self.env.company.currency_id.id)
+        default=_default_currency_id)
     state = fields.Selection([
         ('draft', 'RFQ'),
         ('sent', 'RFQ Sent'),
@@ -172,12 +179,13 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def create(self, vals):
+        company_id = vals.get('company_id', self.default_get(['company_id'])['company_id'])
         if vals.get('name', 'New') == 'New':
             seq_date = None
             if 'date_order' in vals:
                 seq_date = fields.Datetime.context_timestamp(self, fields.Datetime.to_datetime(vals['date_order']))
-            vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order', sequence_date=seq_date) or '/'
-        return super(PurchaseOrder, self).create(vals)
+            vals['name'] = self.env['ir.sequence'].with_context(force_company=company_id).next_by_code('purchase.order', sequence_date=seq_date) or '/'
+        return super(PurchaseOrder, self.with_context(company_id=company_id)).create(vals)
 
     def write(self, vals):
         res = super(PurchaseOrder, self).write(vals)
@@ -197,7 +205,7 @@ class PurchaseOrder(models.Model):
         self = self.with_context(ctx)
         new_po = super(PurchaseOrder, self).copy(default=default)
         for line in new_po.order_line:
-            if new_po.date_planned:
+            if new_po.date_planned and not line.display_type:
                 line.date_planned = new_po.date_planned
             elif line.product_id:
                 seller = line.product_id._select_seller(
@@ -429,6 +437,7 @@ class PurchaseOrder(models.Model):
             'default_type': 'in_invoice',
             'default_company_id': self.company_id.id,
             'default_purchase_id': self.id,
+            'default_partner_id': self.partner_id.id,
         }
         # Invoice_ids may be filtered depending on the user. To ensure we get all
         # invoices related to the purchase order, we read them in sudo to fill the
@@ -542,8 +551,8 @@ class PurchaseOrderLine(models.Model):
     def _compute_tax_id(self):
         for line in self:
             fpos = line.order_id.fiscal_position_id or line.order_id.partner_id.with_context(force_company=line.company_id.id).property_account_position_id
-            # If company_id is set, always filter taxes by the company
-            taxes = line.product_id.supplier_taxes_id.filtered(lambda r: not line.company_id or r.company_id == line.company_id)
+            # If company_id is set in the order, always filter taxes by the company
+            taxes = line.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == line.order_id.company_id)
             line.taxes_id = fpos.map_tax(taxes, line.product_id, line.order_id.partner_id) if fpos else taxes
 
     @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity')
@@ -604,7 +613,7 @@ class PurchaseOrderLine(models.Model):
 
     def write(self, values):
         if 'display_type' in values and self.filtered(lambda line: line.display_type != values.get('display_type')):
-            raise UserError("You cannot change the type of a purchase order line. Instead you should delete the current line and create a new line of the proper type.")
+            raise UserError(_("You cannot change the type of a purchase order line. Instead you should delete the current line and create a new line of the proper type."))
 
         if 'product_qty' in values:
             for line in self:

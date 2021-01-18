@@ -53,9 +53,8 @@ class SaleOrder(models.Model):
         super(SaleOrder, self)._compute_expected_date()
         for order in self:
             dates_list = []
-            confirm_date = fields.Datetime.from_string(order.date_order if order.state in ['sale', 'done'] else fields.Datetime.now())
-            for line in order.order_line.filtered(lambda x: x.state != 'cancel' and not x._is_delivery()):
-                dt = confirm_date + timedelta(days=line.customer_lead or 0.0)
+            for line in order.order_line.filtered(lambda x: x.state != 'cancel' and not x._is_delivery() and not x.display_type):
+                dt = line._expected_date()
                 dates_list.append(dt)
             if dates_list:
                 expected_date = min(dates_list) if order.picking_policy == 'direct' else max(dates_list)
@@ -107,7 +106,8 @@ class SaleOrder(models.Model):
     @api.onchange('company_id')
     def _onchange_company_id(self):
         if self.company_id:
-            self.warehouse_id = self.env['stock.warehouse'].search([('company_id', '=', self.company_id.id)], limit=1)
+            warehouse_id = self.env['ir.default'].get_model_defaults('sale.order').get('warehouse_id')
+            self.warehouse_id = warehouse_id or self.env['stock.warehouse'].search([('company_id', '=', self.company_id.id)], limit=1)
 
     @api.onchange('partner_shipping_id')
     def _onchange_partner_shipping_id(self):
@@ -148,7 +148,7 @@ class SaleOrder(models.Model):
             picking_id = picking_id[0]
         else:
             picking_id = pickings[0]
-        action['context'] = dict(self._context, default_partner_id=self.partner_id.id, default_picking_id=picking_id.id, default_picking_type_id=picking_id.picking_type_id.id, default_origin=self.name, default_group_id=picking_id.group_id.id)
+        action['context'] = dict(self._context, default_partner_id=self.partner_id.id, default_picking_type_id=picking_id.picking_type_id.id, default_origin=self.name, default_group_id=picking_id.group_id.id)
         return action
 
     def action_cancel(self):
@@ -215,12 +215,12 @@ class SaleOrderLine(models.Model):
     is_mto = fields.Boolean(compute='_compute_is_mto')
     display_qty_widget = fields.Boolean(compute='_compute_qty_to_deliver')
 
-    @api.depends('product_id', 'product_uom_qty', 'qty_delivered', 'state')
+    @api.depends('product_id', 'product_uom_qty', 'qty_delivered', 'state', 'product_uom')
     def _compute_qty_to_deliver(self):
         """Compute the visibility of the inventory widget."""
         for line in self:
             line.qty_to_deliver = line.product_uom_qty - line.qty_delivered
-            if line.state == 'draft' and line.product_type == 'product' and line.qty_to_deliver > 0:
+            if line.state == 'draft' and line.product_type == 'product' and line.product_uom and line.qty_to_deliver > 0:
                 line.display_qty_widget = True
             else:
                 line.display_qty_widget = False
@@ -236,16 +236,14 @@ class SaleOrderLine(models.Model):
         grouped_lines = defaultdict(lambda: self.env['sale.order.line'])
         # We first loop over the SO lines to group them by warehouse and schedule
         # date in order to batch the read of the quantities computed field.
-        now = fields.Datetime.now()
         for line in self:
-            if not line.display_qty_widget:
+            if not (line.product_id and line.display_qty_widget):
                 continue
             line.warehouse_id = line.order_id.warehouse_id
             if line.order_id.commitment_date:
                 date = line.order_id.commitment_date
             else:
-                confirm_date = line.order_id.date_order if line.order_id.state in ['sale', 'done'] else now
-                date = confirm_date + timedelta(days=line.customer_lead or 0.0)
+                date = line._expected_date()
             grouped_lines[(line.warehouse_id.id, date)] |= line
 
         treated = self.browse()

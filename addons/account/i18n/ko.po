@@ -8,17 +8,17 @@
 # Hwang, Geon Gu <under_09@naver.com>, 2019
 # Linda Stockelova <stockeloval@btlnet.com>, 2019
 # Mark Lee <odoos@soti.33mail.com>, 2019
-# Martin Trigaux, 2019
 # Link Up링크업 <linkup.way@gmail.com>, 2019
 # Seongseok Shin <shinss61@hotmail.com>, 2019
 # Linkup <link-up@naver.com>, 2019
+# Martin Trigaux, 2020
 # JH CHOI <hwangtog@gmail.com>, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 12:32+0000\n"
+"POT-Creation-Date: 2020-07-01 12:20+0000\n"
 "PO-Revision-Date: 2019-08-26 09:06+0000\n"
 "Last-Translator: JH CHOI <hwangtog@gmail.com>, 2020\n"
 "Language-Team: Korean (https://www.transifex.com/odoo/teams/41243/ko/)\n"
@@ -910,6 +910,12 @@ msgid "A selected statement line was already reconciled with an account move."
 msgstr "선택한 명세서 행은 이미 계정 이동으로 조정되었습니다."
 
 #. module: account
+#: code:addons/account/models/account.py:0
+#, python-format
+msgid "A tag defined to be used on taxes must always have a country set."
+msgstr "세금에 사용하도록 정의된 태그에는 항상 국가 세트가 있어야 합니다."
+
+#. module: account
 #: model:ir.model.constraint,message:account.constraint_account_fiscal_position_tax_tax_src_dest_uniq
 msgid "A tax fiscal position could be defined only one time on same taxes."
 msgstr "세금 재정 상태는 같은 세금들에서 오로지 한번만 선언됩니다."
@@ -1367,10 +1373,18 @@ msgstr "재정 상태 계정 매핑"
 
 #. module: account
 #: code:addons/account/wizard/account_accrual_accounting.py:0
+#, python-format
+msgid ""
+"Accrual Adjusting Entries ({percent}%% recognized) have been created for "
+"this invoice on {date}"
+msgstr "{date}에 이 송장에 대한 발생 조정 항목({percent} %% 승인)이 생성되었습니다."
+
+#. module: account
+#: code:addons/account/wizard/account_accrual_accounting.py:0
 #: code:addons/account/wizard/account_accrual_accounting.py:0
 #, python-format
-msgid "Accrual Adjusting Entry (%s recognized) for invoice: %s"
-msgstr "송장에 대한 미지급 조정 항목 (%s 인정됨) : %s"
+msgid "Accrual Adjusting Entry (%s%% recognized) for invoice: %s"
+msgstr "송장에 대한 발생 조정 항목 (%s%% 승인) : %s"
 
 #. module: account
 #: code:addons/account/wizard/account_accrual_accounting.py:0
@@ -1918,6 +1932,7 @@ msgid "Analytic Acc."
 msgstr "분석 계정"
 
 #. module: account
+#: model:ir.model,name:account.model_account_analytic_account
 #: model:ir.model.fields,field_description:account.field_account_invoice_report__analytic_account_id
 #: model:ir.model.fields,field_description:account.field_account_move_line__analytic_account_id
 #: model:ir.model.fields,field_description:account.field_account_reconcile_model__analytic_account_id
@@ -1963,6 +1978,7 @@ msgid "Analytic Lines"
 msgstr "분석 명세"
 
 #. module: account
+#: model:ir.model,name:account.model_account_analytic_tag
 #: model:ir.model.fields,field_description:account.field_account_move_line__analytic_tag_ids
 #: model:ir.model.fields,field_description:account.field_account_reconcile_model__analytic_tag_ids
 #: model:ir.model.fields,field_description:account.field_res_config_settings__group_analytic_tags
@@ -2346,6 +2362,7 @@ msgstr "예금거래 명세서.pdf"
 
 #. module: account
 #: model:ir.actions.act_window,name:account.action_bank_statement_tree
+#: model_terms:ir.ui.view,arch_db:account.view_account_bank_journal_form
 msgid "Bank Statements"
 msgstr "예금거래 명세서"
 
@@ -2640,6 +2657,7 @@ msgstr "항목 취소"
 #: model:ir.model.fields.selection,name:account.selection__account_invoice_report__state__cancel
 #: model:ir.model.fields.selection,name:account.selection__account_move__state__cancel
 #: model:ir.model.fields.selection,name:account.selection__account_payment__state__cancelled
+#: model_terms:ir.ui.view,arch_db:account.view_account_invoice_filter
 msgid "Cancelled"
 msgstr "취소됨"
 
@@ -3122,6 +3140,7 @@ msgstr "협력사"
 #: model:ir.model.fields,field_description:account.field_account_accrual_accounting_wizard__company_id
 #: model:ir.model.fields,field_description:account.field_account_bank_statement__company_id
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__company_id
+#: model:ir.model.fields,field_description:account.field_account_cash_rounding__company_id
 #: model:ir.model.fields,field_description:account.field_account_common_journal_report__company_id
 #: model:ir.model.fields,field_description:account.field_account_common_report__company_id
 #: model:ir.model.fields,field_description:account.field_account_financial_year_op__company_id
@@ -5709,6 +5728,13 @@ msgid "Indicates that this journal item is a tax line"
 msgstr "이 분개 항목이 세금 내역임을 나타냅니다."
 
 #. module: account
+#. openerp-web
+#: code:addons/account/static/src/xml/account_payment.xml:0
+#, python-format
+msgid "Info"
+msgstr "정보"
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_line_form
 msgid "Information"
 msgstr "정보"
@@ -5751,11 +5777,6 @@ msgstr "유동 계정에서 다른 계정으로 자금을 이동할 때 사용�
 #: model:ir.model.fields,field_description:account.field_account_account_type__internal_group
 msgid "Internal Group"
 msgstr "내부 그룹"
-
-#. module: account
-#: model:ir.model.fields,field_description:account.field_account_move__narration
-msgid "Internal Note"
-msgstr "내부 노트"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_account__note
@@ -6131,6 +6152,14 @@ msgid ""
 msgstr ""
 "이미 분개를 생성한 지불은 번호 매김에 공백이 생기기 때문에 삭제할 수 없습니다. 정기 환원으로 인해 다시 분개를 작성하고 취소해야 "
 "합니다."
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid ""
+"It seems that the taxes have been modified since the creation of the journal"
+" entry. You should create the credit note manually instead."
+msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.account_journal_dashboard_kanban_view
@@ -7198,12 +7227,6 @@ msgid "Next Number Prefix"
 msgstr "다음 번호 접두사"
 
 #. module: account
-#: code:addons/account/models/account_bank_statement.py:545
-#, python-format
-msgid "No default debit and credit account defined on journal %s (ids: %s)"
-msgstr "%s 분개장에 기본 차변 및 대변 계정이 정의되지 않았습니다. (ids : %s)"
-
-#. module: account
 #: model:ir.model.fields,field_description:account.field_account_move_line__blocked
 msgid "No Follow-up"
 msgstr "후속 관리 없음"
@@ -7218,6 +7241,12 @@ msgstr "메시지 없음"
 #, python-format
 msgid "No attachment was provided"
 msgstr "첨부 파일이 제공되지 않았습니다"
+
+#. module: account
+#: code:addons/account/models/account_bank_statement.py:0
+#, python-format
+msgid "No default debit and credit account defined on journal %s (ids: %s)."
+msgstr "%s 분개장에 기본 차변 및 대변 계정이 정의되지 않았습니다. (ids : %s)"
 
 #. module: account
 #: code:addons/account/models/account_reconcile_model.py:0
@@ -7297,6 +7326,7 @@ msgstr "만기 안됨"
 #. module: account
 #: model:ir.model.fields.selection,name:account.selection__account_invoice_report__invoice_payment_state__not_paid
 #: model:ir.model.fields.selection,name:account.selection__account_move__invoice_payment_state__not_paid
+#: model_terms:ir.ui.view,arch_db:account.view_account_invoice_filter
 msgid "Not Paid"
 msgstr "지불 안됨"
 
@@ -7590,6 +7620,7 @@ msgid "Opening Unit Numbers"
 msgstr "개시 단위 숫자"
 
 #. module: account
+#: code:addons/account/models/account.py:0
 #: code:addons/account/models/account.py:0
 #, python-format
 msgid "Opening balance"
@@ -7970,6 +8001,7 @@ msgid "Payment Method Type"
 msgstr "결제 방법 유형"
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.view_account_bank_journal_form
 #: model_terms:ir.ui.view,arch_db:account.view_account_journal_form
 msgid "Payment Method Types"
 msgstr "결제 방법 유형"
@@ -8242,6 +8274,18 @@ msgid ""
 msgstr "계정과목 일람표를 설치하거나 처리 전에 기타 분개장을 생성해 주십시오."
 
 #. module: account
+#: code:addons/account/models/account_cash_rounding.py:0
+#, python-format
+msgid "Please set a positive rounding value."
+msgstr "양수 반올림 값을 설정하십시오."
+
+#. module: account
+#: code:addons/account/models/account_cash_rounding.py:33
+#, python-format
+msgid "Please set a strictly positive rounding value."
+msgstr ""
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
 msgid "Please use the following communication for your payment :"
 msgstr "지불 방법은 다음과 같습니다 :"
@@ -8368,6 +8412,13 @@ msgstr "선급금"
 msgid ""
 "Preset to create journal entries during a invoices and payments matching"
 msgstr "청구서 및 지불금 일치 작업 시 분개장 기입 항목을 작성하기 위한 사전 설정"
+
+#. module: account
+#. openerp-web
+#: code:addons/account/static/src/xml/account_reconciliation.xml:0
+#, python-format
+msgid "Presets config"
+msgstr "사전 설정 구성"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
@@ -8963,6 +9014,11 @@ msgid "Revenue/Expense Account"
 msgstr "수익/비용 계정"
 
 #. module: account
+#: model:ir.model.fields,field_description:account.field_account_move__reversal_move_id
+msgid "Reversal Move"
+msgstr "환입 이동"
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_move_reversal__date
 msgid "Reversal date"
 msgstr "환입일"
@@ -9441,6 +9497,12 @@ msgid "Send Money"
 msgstr "송금"
 
 #. module: account
+#: code:addons/account/wizard/account_payment_send.py:0
+#, python-format
+msgid "Send Payment"
+msgstr ""
+
+#. module: account
 #: model:ir.actions.act_window,name:account.action_open_account_onboarding_sample_invoice
 msgid "Send a sample invoice"
 msgstr "예제 청구서 전송"
@@ -9459,6 +9521,11 @@ msgstr "우편으로 송장 및 결제 후속 조치 발송"
 #: model:ir.actions.act_window,name:account.account_send_payment_receipt_by_email_action
 msgid "Send receipt by email"
 msgstr "이메일로 영수증 전송"
+
+#. module: account
+#: model:ir.actions.act_window,name:account.account_send_payment_receipt_by_email_action_multi
+msgid "Send receipts by email"
+msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.onboarding_sample_invoice_step
@@ -9544,10 +9611,13 @@ msgstr ""
 "때만 서식의 계정을 생성할 때 유용합니다."
 
 #. module: account
+#. openerp-web
+#: code:addons/account/static/src/xml/account_reconciliation.xml:0
 #: model:ir.actions.act_window,name:account.action_account_config
 #: model:ir.actions.act_window,name:account.action_open_settings
 #: model:ir.ui.menu,name:account.menu_account_config
 #: model_terms:ir.ui.view,arch_db:account.account_journal_dashboard_kanban_view
+#, python-format
 msgid "Settings"
 msgstr "설정"
 
@@ -9890,11 +9960,6 @@ msgstr "상대 값을 제안합니다."
 #: model:ir.model.fields,field_description:account.field_res_users__supplier_rank
 msgid "Supplier Rank"
 msgstr "공급업체 순위"
-
-#. module: account
-#: model:ir.actions.act_window,name:account.res_partner_action_supplier
-msgid "Suppliers"
-msgstr "공급업체"
 
 #. module: account
 #: model:ir.actions.server,name:account.action_move_switch_invoice_to_credit_note
@@ -10529,6 +10594,11 @@ msgid "Terms & Conditions"
 msgstr "내용 및 조건"
 
 #. module: account
+#: model:ir.model.fields,field_description:account.field_account_move__narration
+msgid "Terms and Conditions"
+msgstr "이용 약관"
+
+#. module: account
 #. openerp-web
 #: code:addons/account/static/src/xml/account_reconciliation.xml:0
 #, python-format
@@ -10822,6 +10892,14 @@ msgid ""
 "The following invoice(s) will not be sent by email, because the customers "
 "don't have email address."
 msgstr "고객에게 이메일 주소가 없으므로 다음 송장을 이메일로 보내지 않습니다."
+
+#. module: account
+#: code:addons/account/wizard/account_payment_send.py:0
+#, python-format
+msgid ""
+"The following payment(s) will not be sent by email, because the customers "
+"don't have email address."
+msgstr ""
 
 #. module: account
 #: code:addons/account/models/chart_template.py:0
@@ -12025,6 +12103,7 @@ msgid "Vendor Taxes"
 msgstr "공급업체 세금"
 
 #. module: account
+#: model:ir.actions.act_window,name:account.res_partner_action_supplier
 #: model:ir.ui.menu,name:account.menu_account_supplier
 #: model:ir.ui.menu,name:account.menu_finance_payables
 #: model_terms:ir.ui.view,arch_db:account.res_partner_view_search
@@ -12266,6 +12345,12 @@ msgid "You can only send invoices."
 msgstr "송장만 보낼 수 있습니다."
 
 #. module: account
+#: code:addons/account/wizard/account_payment_send.py:0
+#, python-format
+msgid "You can only send payments."
+msgstr ""
+
+#. module: account
 #: code:addons/account/models/account_move.py:0
 #, python-format
 msgid ""
@@ -12289,6 +12374,46 @@ msgid ""
 "invoice when making the payment."
 msgstr ""
 "여기에서 승인되면 고객 청구서에 표시되는 기본 통신을 설정하여 고객이 결제 시 특정 청구서를 참조할 수 있도록 할 수 있습니다."
+
+#. module: account
+#: code:addons/account/models/account.py:0
+#, python-format
+msgid ""
+"You can't change the company of your account since there are some journal "
+"items linked to it."
+msgstr "연결된 일부 분개장 기입 항목이 있으므로 계정의 회사를 변경할 수 없습니다."
+
+#. module: account
+#: code:addons/account/models/account.py:0
+#, python-format
+msgid ""
+"You can't change the company of your journal since there are some journal "
+"entries linked to it."
+msgstr "분개장과 연결된 분개장 기입 항목이 있으므로 분개장의 회사를 변경할 수 없습니다."
+
+#. module: account
+#: code:addons/account/models/account.py:0
+#, python-format
+msgid ""
+"You can't change the company of your tax since there are some journal items "
+"linked to it."
+msgstr "연결된 일부 분개장 기입 항목이 있으므로 세금의 회사를 변경할 수 없습니다."
+
+#. module: account
+#: code:addons/account/models/account_analytic_line.py:0
+#, python-format
+msgid ""
+"You can't set a different company on your analytic account since there are "
+"some journal items linked to it."
+msgstr "연결된 분개장 기입 항목이 있으므로 분석 계정에 다른 회사를 설정할 수 없습니다."
+
+#. module: account
+#: code:addons/account/models/account_analytic_line.py:0
+#, python-format
+msgid ""
+"You can't set a different company on your analytic tags since there are some"
+" journal items linked to it."
+msgstr "연결된 분개장 기입 항목이 있으므로 분석 태그에 다른 회사를 설정할 수 없습니다."
 
 #. module: account
 #: code:addons/account/models/account_move.py:0
@@ -12340,6 +12465,12 @@ msgstr "이미 전기된 지불금을 삭제할 수 없습니다."
 #, python-format
 msgid "You cannot delete an entry which has been posted once."
 msgstr "한 번 전기된 항목은 삭제할 수 없습니다."
+
+#. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid "You cannot delete an item linked to a posted entry."
+msgstr ""
 
 #. module: account
 #: code:addons/account/models/res_config_settings.py:0
@@ -12532,6 +12663,12 @@ msgstr ""
 "변환하십시오."
 
 #. module: account
+#: code:addons/account/models/account_move.py:0
+#, python-format
+msgid "You don't have the access rights to post an invoice."
+msgstr "송장을 게시할 수 있는 접근 권한이 없습니다."
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
 msgid "You have"
 msgstr "가 있습니다."
@@ -12717,6 +12854,11 @@ msgid "of the following month"
 msgstr "다음 달"
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "on"
+msgstr "있음"
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_move_form
 msgid "outstanding debits"
 msgstr "미지불 차변"
@@ -12818,43 +12960,3 @@ msgstr "공급업체 청구서"
 #: model_terms:ir.ui.view,arch_db:account.view_bank_statement_form
 msgid "→ Count"
 msgstr "→ 계수"
-
-#. module: account
-#: code:addons/account/models/account.py:0
-#, python-format
-msgid ""
-"You can't change the company of your account since there are some journal "
-"items linked to it."
-msgstr "연결된 일부 분개장 기입 항목이 있으므로 계정의 회사를 변경할 수 없습니다."
-
-#. module: account
-#: code:addons/account/models/account.py:0
-#, python-format
-msgid ""
-"You can't change the company of your journal since there are some journal "
-"entries linked to it."
-msgstr "분개장과 연결된 분개장 기입 항목이 있으므로 분개장의 회사를 변경할 수 없습니다."
-
-#. module: account
-#: code:addons/account/models/account.py:0
-#, python-format
-msgid ""
-"You can't change the company of your tax since there are some journal items "
-"linked to it."
-msgstr "연결된 일부 분개장 기입 항목이 있으므로 세금의 회사를 변경할 수 없습니다."
-
-#. module: account
-#: code:addons/account/models/account_analytic_line.py:0
-#, python-format
-msgid ""
-"You can't set a different company on your analytic account since there are "
-"some journal items linked to it."
-msgstr "연결된 분개장 기입 항목이 있으므로 분석 계정에 다른 회사를 설정할 수 없습니다."
-
-#. module: account
-#. module: account
-#: code:addons/account/models/account_analytic_line.py:0
-#: code:addons/account/models/account.py:56
-#, python-format, python-format
-msgid "A tag defined to be used on taxes must always have a country set."
-msgstr "세금에 사용하도록 정의된 태그에는 항상 국가 세트가 있어야 합니다."

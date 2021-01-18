@@ -4,7 +4,6 @@
 # 
 # Translators:
 # Rick Hunter <rick_hunter_ec@yahoo.com>, 2019
-# Jesús Alan Ramos Rodríguez <alan.ramos@jarsa.com.mx>, 2019
 # Carlos Lopez <celm1990@hotmail.com>, 2019
 # Diego de cos <diegodecos@hotmail.com>, 2019
 # Cristopher Cravioto <ccr@odoo.com>, 2019
@@ -20,14 +19,16 @@
 # oihane <oihanecruce@gmail.com>, 2019
 # Nelson Ramírez Sánchez <info@konos.cl>, 2020
 # Pedro M. Baeza <pedro.baeza@gmail.com>, 2020
+# Omar Torres <otorresgi18@gmail.com>, 2020
+# Jesús Alan Ramos Rodríguez <alan.ramos@jarsa.com.mx>, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 12:32+0000\n"
+"POT-Creation-Date: 2020-04-27 09:21+0000\n"
 "PO-Revision-Date: 2019-08-26 09:13+0000\n"
-"Last-Translator: Pedro M. Baeza <pedro.baeza@gmail.com>, 2020\n"
+"Last-Translator: Jesús Alan Ramos Rodríguez <alan.ramos@jarsa.com.mx>, 2020\n"
 "Language-Team: Spanish (https://www.transifex.com/odoo/teams/41243/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -226,17 +227,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:project.view_project_kanban
 msgid "<i class=\"fa fa-smile-o\"/> No rating yet"
 msgstr "<i class=\"fa fa-smile-o\"/>Sin valoración aun"
-
-#. module: project
-#: code:addons/project/models/project.py:0
-#, python-format
-msgid ""
-"<p class=\"o_view_nocontent_smiling_face\">\n"
-"                        Documents are attached to the tasks of your project.</p><p>\n"
-"                        Send messages or log internal notes with attachments to link\n"
-"                        documents to your project.\n"
-"                    </p>"
-msgstr ""
 
 #. module: project
 #: code:addons/project/models/project.py:0
@@ -544,12 +534,6 @@ msgid "Attachment that don't come from message."
 msgstr "Adjunto que no procede de un mensaje."
 
 #. module: project
-#: code:addons/project/models/project.py:0
-#, python-format
-msgid "Attachments"
-msgstr "Adjuntos"
-
-#. module: project
 #: model:ir.model.fields,field_description:project.field_project_task_type__auto_validation_kanban_state
 msgid "Automatic kanban status"
 msgstr "Estado kanban automático"
@@ -561,6 +545,9 @@ msgid ""
 " * A good feedback from the customer will update the kanban state to 'ready for the new stage' (green bullet).\n"
 " * A medium or a bad feedback will set the kanban state to 'blocked' (red bullet).\n"
 msgstr ""
+"Modifique automáticamente el estado Kanban cuando el cliente responda a los comentarios de esta etapa.\n"
+" * Una buena retroalimentación del cliente actualizará el estado Kanban a ' listo para la nueva etapa ' (viñeta verde).\n"
+" * Un medio o una mala retroalimentación establecerá el estado Kanban en ' bloqueado ' (bala roja).\n"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.portal_project_rating_progressbar
@@ -1249,7 +1236,7 @@ msgstr "GTD"
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.edit_project
 msgid "Get customer feedback"
-msgstr ""
+msgstr "Obtenga comentarios de los clientes"
 
 #. module: project
 #. openerp-web
@@ -1565,7 +1552,7 @@ msgstr "Explicación del kanban válido"
 #. module: project
 #: model:ir.model.fields,field_description:project.field_digest_digest__kpi_project_task_opened_value
 msgid "Kpi Project Task Opened Value"
-msgstr ""
+msgstr "Valor abierto de la tarea del proyecto Kpi"
 
 #. module: project
 #: model:ir.model.fields,help:project.field_project_project__label_tasks
@@ -2820,6 +2807,9 @@ msgstr "Tarea lista para la siguiente etapa"
 #: model_terms:ir.ui.view,arch_db:project.view_task_partner_info_form
 #: model_terms:ir.ui.view,arch_db:project.view_task_search_form
 #: model_terms:ir.ui.view,arch_db:project.view_task_tree2
+#: model:project.project,label_tasks:project.project_project_1
+#: model:project.project,label_tasks:project.project_project_2
+#: model:project.project,label_tasks:project.project_project_data
 msgid "Tasks"
 msgstr "Tareas"
 
@@ -2897,12 +2887,6 @@ msgstr ""
 #. module: project
 #: code:addons/project/models/project.py:0
 #, python-format
-msgid "The parent task belongs to a company you do not have access to."
-msgstr ""
-
-#. module: project
-#: code:addons/project/models/project.py:0
-#, python-format
 msgid ""
 "The project cannot be shared with the recipient(s) because the privacy of "
 "the project is too restricted. Set the privacy to 'Visible by following "
@@ -2912,12 +2896,6 @@ msgstr ""
 "privacidad del proyecto es demasiado restringida. Establezca la privacidad "
 "en `Visible siguiendo a los clientes' para que los destinatarios puedan "
 "acceder a ella."
-
-#. module: project
-#: code:addons/project/models/project.py:0
-#, python-format
-msgid "The subtasks belong to a company you do not have access to."
-msgstr ""
 
 #. module: project
 #: code:addons/project/models/project.py:0
@@ -3040,6 +3018,8 @@ msgid ""
 "To get things done, use activities and status on tasks.<br>\n"
 "                    Chat in real time or by email to collaborate efficiently."
 msgstr ""
+"Para hacer las cosas, utilice las actividades y el estado de las tareas. <br>\n"
+"                    Comuníquese en tiempo real o por email para colaborar eficientemente."
 
 #. module: project
 #. openerp-web
@@ -3108,7 +3088,7 @@ msgstr "Use la Calificación en el Proyecto"
 #. module: project
 #: model:res.groups,name:project.group_subtask_project
 msgid "Use Subtasks"
-msgstr ""
+msgstr "Usar subtareas"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__label_tasks
@@ -3188,7 +3168,7 @@ msgstr "Semanalmente"
 #. module: project
 #: model:ir.model.fields,help:project.field_project_project__is_favorite
 msgid "Whether this project should be displayed on your dashboard."
-msgstr ""
+msgstr "Si este proyecto debe mostrarse en su tablero."
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__resource_calendar_id
@@ -3252,6 +3232,16 @@ msgstr ""
 " a entender el significado y el propósito de esta etapa."
 
 #. module: project
+#: code:addons/project/models/analytic_account.py:0
+#, python-format
+msgid ""
+"You cannot change the company of an analytical account if it is related to a"
+" project."
+msgstr ""
+"No se puede cambiar la empresa de una cuenta analítica si está relacionada "
+"con un proyecto."
+
+#. module: project
 #: code:addons/project/models/project.py:0
 #, python-format
 msgid ""
@@ -3300,4 +3290,4 @@ msgstr "tarea"
 #. module: project
 #: model_terms:ir.actions.act_window,help:project.open_view_project_all
 msgid "to play with."
-msgstr "per jugar."
+msgstr "para comenzar."
